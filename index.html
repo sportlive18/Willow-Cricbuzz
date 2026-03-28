@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>SPORTLINK - Live</title>
+  
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-dark: #000000;
+      --bg-card: #0c0c0c;
+      --gold-main: #FFD700;
+      --gold-glow: rgba(255, 215, 0, 0.3);
+      --text-white: #e0e0e0;
+      --text-gray: #888888;
+      --border-color: rgba(255, 255, 255, 0.05);
+      --accent-red: #ff4d4d;
+      --gradient-bg-top: #0a0a0a;
+      --gradient-bg-bottom: #000000;
+      --whatsapp-green: #25D366;
+    }
+
+    * { 
+      box-sizing: border-box; 
+      -webkit-tap-highlight-color: transparent; 
+      outline: none; 
+      user-select: none; 
+      -webkit-touch-callout: none;
+      -webkit-text-size-adjust: 100%;
+    }
+    
+    body {
+      margin: 0; padding: 0;
+      background-color: var(--bg-dark);
+      background-image: radial-gradient(circle at top center, var(--gradient-bg-top), var(--gradient-bg-bottom) 70%);
+      font-family: 'Outfit', sans-serif;
+      color: var(--text-white);
+      padding-bottom: 80px;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body::-webkit-scrollbar { width: 8px; }
+    body::-webkit-scrollbar-track { background: var(--bg-dark); }
+    body::-webkit-scrollbar-thumb { background-color: #222; border-radius: 10px; border: 2px solid var(--bg-dark); }
+    body::-webkit-scrollbar-thumb:hover { background-color: #444; }
+
+    /* HEADER */
+    header {
+      position: fixed; top: 0; width: 100%; height: 60px;
+      background: rgba(0, 0, 0, 0.98);
+      backdrop-filter: blur(25px);
+      border-bottom: 1px solid var(--border-color);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 16px;
+      z-index: 1000;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.9);
+    }
+
+    .menu-icon { font-size: 26px; color: #fff; cursor: pointer; transition: 0.2s transform, 0.2s color; }
+    .menu-icon:active { color: var(--gold-main); transform: scale(0.9); }
+    
+    .logo-container { 
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); 
+      display: flex; align-items: center; gap: 6px;
+    }
+    .logo-text { 
+      font-family: 'Rajdhani'; font-weight: 800; font-size: 20px;
+      color: #fff; letter-spacing: 1.5px;
+      text-shadow: 0 0 8px rgba(255,215,0,0.2);
+    }
+    .logo-text span { color: var(--gold-main); }
+
+    .header-live {
+      display: flex; align-items: center; gap: 7px;
+      background: rgba(255, 77, 77, 0.15);
+      border: 1px solid rgba(255, 77, 77, 0.3);
+      padding: 4px 10px; border-radius: 20px;
+      box-shadow: 0 0 12px rgba(255, 77, 77, 0.3);
+    }
+    .h-dot { 
+      width: 8px; height: 8px; background: var(--accent-red); border-radius: 50%; 
+      box-shadow: 0 0 8px var(--accent-red), 0 0 16px rgba(255,0,0,0.4);
+      animation: blink 1s infinite cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+    .h-text { font-size: 11px; font-weight: 700; color: var(--accent-red); font-family: 'Rajdhani'; letter-spacing: 0.8px; text-transform: uppercase; }
+
+    /* VIDEO SECTION */
+    .video-wrapper {
+      margin-top: 60px;
+      width: 100%; position: relative;
+      background: #000;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.9);
+      border-bottom-left-radius: 15px;
+      border-bottom-right-radius: 15px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.02);
+    }
+    .video-container {
+      width: 100%; aspect-ratio: 16/9;
+      position: relative; overflow: hidden;
+      background-color: #000;
+    }
+    .video-container iframe { 
+      width: 100%; height: 100%; border: none; display: block; 
+    }
+    .video-bar { 
+      height: 4px; width: 100%; 
+      background: linear-gradient(90deg, transparent 10%, #FFD700, #e6c200, transparent 90%);
+      opacity: 0.7; 
+      box-shadow: 0 0 12px var(--gold-glow);
+    }
+
+    /* TICKER */
+    .ticker-wrap {
+      background: var(--bg-card);
+      height: 35px;
+      overflow: hidden;
+      display: flex; align-items: center; border-bottom: 1px solid var(--border-color);
+      position: relative;
+      padding: 0 12px;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+    }
+    .ticker-wrap::before, .ticker-wrap::after {
+      content: ''; position: absolute; top: 0; bottom: 0; width: 35px; z-index: 2;
+      pointer-events: none;
+    }
+    .ticker-wrap::before { left: 0; background: linear-gradient(90deg, var(--bg-card) 20%, transparent); }
+    .ticker-wrap::after { right: 0; background: linear-gradient(-90deg, var(--bg-card) 20%, transparent); }
+    .ticker-text {
+      color: var(--gold-main); font-weight: 600; font-family: 'Outfit'; font-size: 13px;
+      letter-spacing: 0.8px; text-transform: uppercase;
+      white-space: nowrap; animation: scroll 20s linear infinite;
+      padding-left: 100%;
+      text-shadow: 0 0 4px rgba(255,215,0,0.1);
+    }
+    @keyframes scroll { 100% { transform: translateX(-100%); } }
+
+    /* MAIN ACTIONS */
+    .action-section { 
+      padding: 25px 16px; 
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* DAILY VIEWS CARD */
+    .daily-views-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 15px;
+      padding: 15px 20px;
+      margin-bottom: 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .daily-views-card::before {
+      content: '';
+      position: absolute;
+      top: -10px; left: -10px; width: 40px; height: 40px;
+      background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
+      pointer-events: none;
+      transform: rotate(45deg);
+    }
+    .daily-views-card:active { transform: translateY(1px); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+    .daily-views-card .icon { font-size: 18px; color: var(--gold-main); margin-right: 10px; }
+    .daily-views-card .text { 
+      flex-grow: 1;
+      font-size: 12px; color: var(--text-gray); 
+      text-transform: uppercase; letter-spacing: 0.7px; font-weight: 600;
+    }
+    .daily-views-card .value { 
+      font-size: 20px; font-weight: 700; color: var(--text-white); font-family: 'Rajdhani';
+    }
+
+    /* BUTTONS */
+    .btn-group { display: flex; flex-direction: column; gap: 15px; }
+
+    .btn-main {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px;
+      border-radius: 14px;
+      text-decoration: none;
+      background: linear-gradient(45deg, #25D366, #1ebe59);
+      box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4);
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-main::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(45deg, rgba(255,255,255,0.1), transparent 50%, rgba(255,255,255,0.1));
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .btn-main:active { 
+      transform: scale(0.98); 
+      box-shadow: 0 3px 10px rgba(37, 211, 102, 0.2); 
+    }
+    .btn-main:active::before { opacity: 1; }
+    
+    .btn-content { display: flex; align-items: center; gap: 12px; }
+    .btn-icon-circle { 
+      width: 36px; height: 36px; background: rgba(0,0,0,0.1); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; 
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.2);
+    }
+    .btn-icon-circle i { color: #fff; font-size: 20px; }
+    .btn-text h3 { margin: 0; color: #fff; font-size: 15px; font-weight: 700; font-family: 'Rajdhani'; text-transform: uppercase; letter-spacing: 0.5px; }
+    .btn-text p { margin: 0; color: rgba(255,255,255,0.75); font-size: 10px; font-weight: 600; text-transform: uppercase; }
+    .btn-arrow { color: #fff; font-size: 22px; }
+
+    .btn-secondary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .btn-sec {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 12px; border-radius: 12px;
+      text-decoration: none;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.3);
+      backdrop-filter: blur(3px);
+    }
+    .btn-sec:active { 
+      background: #1a1a1a; 
+      transform: translateY(1px); 
+      box-shadow: 0 1px 5px rgba(0,0,0,0.15); 
+    }
+    .btn-sec i { font-size: 18px; color: #999; }
+    .btn-sec span { font-size: 12px; color: #ccc; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed; left: -100%; top: 0; width: 280px; height: 100%;
+      background: linear-gradient(180deg, #181818, #050505);
+      z-index: 5000; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-right: 1px solid #282828;
+      box-shadow: 6px 0 25px rgba(0,0,0,0.7);
+    }
+    .sidebar.open { left: 0; }
+    .sb-header { padding: 30px 25px; border-bottom: 1px solid #282828; background: #0e0e0e; }
+    .sb-logo { 
+      font-family: 'Rajdhani'; font-size: 24px; font-weight: 800; color: #fff; 
+      letter-spacing: 1.5px;
+      text-shadow: 0 0 10px rgba(255,215,0,0.2);
+    }
+    .sb-logo span { color: var(--gold-main); }
+
+    .sb-link {
+      display: flex; align-items: center; gap: 16px; padding: 18px 25px;
+      color: #b0b0b0; text-decoration: none; font-size: 14px; font-weight: 500;
+      transition: 0.2s ease; border-bottom: 1px solid #1f1f1f;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .sb-link:last-child { border-bottom: none; }
+    .sb-link:active { 
+      background: #202020; color: var(--gold-main); 
+      transform: translateX(5px);
+    }
+    .sb-link i { color: #777; font-size: 20px; transition: 0.2s; }
+    .sb-link:active i { color: var(--gold-main); }
+    
+    .overlay { 
+      position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 4999; 
+      opacity: 0; pointer-events: none; transition: 0.3s ease; 
+    }
+    .overlay.active { opacity: 1; pointer-events: auto; }
+
+    @media (min-width: 768px) {
+      header { padding: 0 30px; height: 70px; }
+      .logo-text { font-size: 24px; }
+      .h-text { font-size: 12px; }
+      .video-wrapper { margin-top: 70px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
+      .ticker-wrap { height: 40px; padding: 0 20px; }
+      .ticker-text { font-size: 14px; }
+      .action-section { padding: 35px 25px; max-width: 650px; }
+      .daily-views-card { padding: 18px 25px; margin-bottom: 25px; }
+      .daily-views-card .icon { font-size: 20px; }
+      .daily-views-card .text { font-size: 13px; }
+      .daily-views-card .value { font-size: 24px; }
+      .btn-main { padding: 18px 25px; border-radius: 16px; }
+      .btn-icon-circle { width: 40px; height: 40px; }
+      .btn-icon-circle i { font-size: 22px; }
+      .btn-text h3 { font-size: 16px; }
+      .btn-text p { font-size: 11px; }
+      .btn-arrow { font-size: 24px; }
+      .btn-secondary-grid { gap: 20px; }
+      .btn-sec { padding: 14px; border-radius: 14px; }
+      .btn-sec i { font-size: 20px; }
+      .btn-sec span { font-size: 13px; }
+      .sidebar { width: 320px; }
+      .sb-header { padding: 35px 30px; }
+      .sb-logo { font-size: 26px; }
+      .sb-link { padding: 20px 30px; font-size: 15px; }
+      .sb-link i { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="menu-icon material-icons" onclick="toggleMenu()">notes</div>
+    <div class="logo-container">
+      <span class="logo-text">SPORT<span>LINK</span></span>
+    </div>
+    <div class="header-live">
+      <div class="h-dot"></div> <span class="h-text">LIVE</span>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="sb-header">
+      <div class="sb-logo">SPORT<span>LINK</span></div>
+    </div>
+    <a href="https://whatsapp.com/channel/0029VbC2oQsC6ZvmwpR3v73v" id="side-wa" class="sb-link"><i class="material-icons">chat</i> Join WhatsApp</a>
+    <a href="javascript:location.reload()" class="sb-link"><i class="material-icons">refresh</i> Refresh Page</a>
+    <a href="javascript:sharePage()" class="sb-link"><i class="material-icons">share</i> Share App</a>
+  </div>
+  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+  <!-- VIDEO -->
+  <div class="video-wrapper">
+    <div class="video-container">
+      <iframe src="https://cricket-yoddha-channel-1.vercel.app/" allowfullscreen allow="autoplay; encrypted-media" scrolling="no"></iframe>
+    </div>
+    <div class="video-bar"></div>
+  </div>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker-text">
+       WELCOME TO SPORTLINK 🏏 | JOIN WHATSAPP FOR MORE LINKS 🔗 | SHARE THIS LINK WITH FRIENDS 🔥 | NO BUFFERING HD STREAM
+    </div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="action-section">
+    
+    <!-- DAILY VIEWS CARD -->
+    <div class="daily-views-card">
+      <i class="material-icons icon">bar_chart</i>
+      <span class="text">Daily Views</span>
+      <span class="value" id="total-views-count">...</span>
+    </div>
+
+    <!-- MAIN BUTTONS -->
+    <div class="btn-group">
+      <a href="https://whatsapp.com/channel/0029VbC2oQsC6ZvmwpR3v73v" id="main-btn" class="btn-main">
+        <div class="btn-content">
+          <div class="btn-icon-circle"><i class="material-icons">chat</i></div>
+          <div class="btn-text">
+            <h3>Join WhatsApp</h3>
+            <p>For Link Backups & Updates</p>
+          </div>
+        </div>
+        <i class="material-icons btn-arrow">chevron_right</i>
+      </a>
+
+      <div class="btn-secondary-grid">
+        <a href="javascript:void(0)" onclick="sharePage()" class="btn-sec">
+          <i class="material-icons">share</i>
+          <span>Share</span>
+        </a>
+        <a href="javascript:location.reload()" class="btn-sec">
+          <i class="material-icons">refresh</i>
+          <span>Refresh</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FIREBASE -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+  <script>
+    const WEBSITE_ID = "sportlink_main";
+    const WHATSAPP_LINK = "https://whatsapp.com/channel/0029VbC2oQsC6ZvmwpR3v73v";
+
+    function toggleMenu() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('overlay').classList.toggle('active');
+    }
+
+    async function sharePage() {
+      if (navigator.share) {
+        await navigator.share({ title: 'Watch Live Cricket HD', text: 'Watch Live Cricket HD without buffering!', url: window.location.href });
+      } else {
+        const dummy = document.createElement("textarea");
+        document.body.appendChild(dummy);
+        dummy.value = window.location.href;
+        dummy.select();
+        document.execCommand("copy");
+        document.body.removeChild(dummy);
+        alert("Link copied to clipboard!");
+      }
+    }
+
+    // FIREBASE CONFIG
+    const firebaseConfig = {
+      apiKey: "AIzaSyA-vR50CMDYJVHApJir-6fmgRqhFiqQDU8",
+      authDomain: "my-website-cricket.firebaseapp.com",
+      databaseURL: "https://my-website-cricket-default-rtdb.firebaseio.com",
+      projectId: "my-website-cricket",
+      storageBucket: "my-website-cricket.appspot.com",
+      messagingSenderId: "664276981494",
+      appId: "1:664276981494:web:4d6b5cd5c55f6b6b18fed7"
+    };
+
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const visitRef = db.ref('daily_stats_v5/' + WEBSITE_ID + '/' + todayStr);
+    visitRef.transaction(current => (current || 0) + 1);
+    visitRef.on('value', (snap) => {
+      document.getElementById('total-views-count').innerText = (snap.val() || 0).toLocaleString();
+    });
+  </script>
+</body>
+</html>
